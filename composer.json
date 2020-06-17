@@ -1,0 +1,23 @@
+{
+    "name": "thomas-miceli/voter",
+    "description": "Permissions validation",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Thomas MICELI",
+            "email": "tho.miceli@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Voter\\": "src/",
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.2"
+    }
+}
