@@ -1,13 +1,20 @@
 {
-    "name": "thomas-miceli/voter",
-    "description": "Permissions validation",
+    "name": "thomas-miceli/voters",
+    "description": "Check and validate complex specific user permissions.",
+    "version": "1.0.0",
     "type": "library",
+    "keywords": ["user", "permission", "check", "validate", "voters", "security"],
     "authors": [
         {
             "name": "Thomas MICELI",
             "email": "tho.miceli@gmail.com"
         }
     ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/thomas-miceli/voters",
+    "support": {
+        "issues": "https://github.com/thomas-miceli/voters/issues"
+    },
     "require": {
         "php": ">=7.4"
     },
