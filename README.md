@@ -49,7 +49,7 @@ class ArticleVoter implements Voter
     }
 
     // ...if yes, the voter will determinate and return the permission for this attribute
-    public function vote(?VoterUser $user, string $attribute, $subject = null): bool
+    public function vote(?\Voter\VoterUser $user, string $attribute, $subject = null): bool
     {
         /** @var Article $subject */
         switch ($attribute) {
@@ -74,13 +74,13 @@ It's possible to set different strategies to determine the permission when multi
 <?php
 
 $permission = new \Voter\Permission(new \Voter\Strategy\AffirmativeStrategy); // default strategy
-// $permission::can() returns true if at least one of the registered voters voted true for the attribute
+// $permission::can() returns true if at least one of the registered voters approved the attribute
 
 $permission = new \Voter\Permission(new \Voter\Strategy\VetoStrategy);
-// $permission::can() returns true if all the registered voters voted true for the attribute
+// $permission::can() returns true if all the registered voters approved the attribute
 
 $permission = new \Voter\Permission(new \Voter\Strategy\MajorityStrategy);
-// $permission::can() returns true if at least half plus one of the registered voters voted true for the attribute
+// $permission::can() returns true if at least half plus one of the registered voters approved the attribute
 ```
 
 We can use factory static methods for a better readability.
@@ -100,26 +100,39 @@ We can create our own strategy and set it to a permission later...
 class CustomStrategy implements \Voter\Strategy\VoterStrategy {
     
     // the permission is granted if at least 4 voters voted true for an attribute
-    public function can(?VoterUser $user, array $voters, string $attribute, $subject): bool
+    public function can(?\Voter\VoterUser $user, array $voters, string $attribute, $subject): bool
     {
-        $yes = 0;
+        $approvals = 0;
         foreach ($voters as $voter) {
             if ($voter->canVote($attribute, $subject)) {
                 $vote = $voter->vote($user, $attribute, $subject);
                 //ConsoleLogger::debug($voter, $vote, $attribute, $user, $subject);
 
                 if ($vote) {
-                    ++$yes;
+                    ++$approvals;
                 }
             }
         }
-        return $yes > 3;
+        return $approvals > 3;
     }
 }
 ```
 
-...then use it
+...then use it.
 
 ```php
+<?php
+
 $permission = new \Voter\Permission(new CustomStrategy);
 ```
+
+We can even easily create generics voters which allows to define how many voters should approve the attribute.
+
+```php
+<?php
+
+$permission = new \Voter\Permission(new \Voter\Strategy\GenericStrategy(40, 5));
+$permission = \Voter\Permission::generic(40, 5);
+// at least 40% and 5 voters should have approved the attribute 
+```
+

@@ -9,17 +9,17 @@ class CustomStrategy implements VoterStrategy {
 
     public function can(?VoterUser $user, array $voters, string $attribute, $subject): bool
     {
-        $yes = 0;
+        $approvals = 0;
         foreach ($voters as $voter) {
             if ($voter->canVote($attribute, $subject)) {
                 $vote = $voter->vote($user, $attribute, $subject);
                 //ConsoleLogger::debug($voter, $vote, $attribute, $user, $subject);
 
                 if ($vote) {
-                    ++$yes;
+                    ++$approvals;
                 }
             }
         }
-        return $yes > 3;
+        return $approvals > 3;
     }
 }

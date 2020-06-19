@@ -5,6 +5,7 @@ namespace Voter;
 
 use InvalidArgumentException;
 use Voter\Strategy\AffirmativeStrategy;
+use Voter\Strategy\GenericStrategy;
 use Voter\Strategy\MajorityStrategy;
 use Voter\Strategy\VetoStrategy;
 use Voter\Strategy\VoterStrategy;
@@ -33,12 +34,10 @@ class Permission
      * @param VoterStrategy|null $strategy
      */
     public function __construct(
-        $strategy = null
+        VoterStrategy $strategy = null
     ) {
         if ($strategy == null) {
             $strategy = new AffirmativeStrategy;
-        } else if (!($strategy instanceof VoterStrategy)) {
-            throw new InvalidArgumentException('Invalid strategy');
         }
 
         $this->strategy = $strategy;
@@ -75,6 +74,19 @@ class Permission
     }
 
     /**
+     * Create a Permission with GenericStrategy.
+     *
+     * @param float $percentage The percentage of voters which approved the attribute.
+     * @param int   $approvals  The number of voters which approved the attribute.
+     *
+     * @return Permission
+     */
+    public static function generic(float $percentage, int $approvals)
+    {
+        return new self(new GenericStrategy($percentage, $approvals));
+    }
+
+    /**
      * Call the method from the defined strategy.
      *
      * @param VoterUser|null $user      The user submitted to the validation.
@@ -106,6 +118,14 @@ class Permission
     public function addVoters(Voter ...$voters)
     {
         $this->voters = [...$this->voters, ...$voters];
+    }
+
+    /**
+     * Remove all the voters
+     */
+    public function clearVoters()
+    {
+        $this->voters = [];
     }
 
     /**

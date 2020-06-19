@@ -15,7 +15,7 @@ final class AffirmativeStrategy implements VoterStrategy
 
     /**
      * Call all the registered voters, and then vote when they can.
-     * If at least one voter votes yes, the method return true.
+     * If at least one voter approved the attribute, the method return true.
      *
      * {@inheritDoc}
      */

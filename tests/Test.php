@@ -14,6 +14,7 @@ use Tests\Helpers\TestVoterUser;
 use Tests\Helpers\YesVoter;
 use Voter\Permission;
 use Voter\Strategy\AffirmativeStrategy;
+use Voter\Strategy\GenericStrategy;
 use Voter\Strategy\MajorityStrategy;
 use Voter\Strategy\VetoStrategy;
 
@@ -131,22 +132,17 @@ class Test extends TestCase
         $this->assertFalse($permission->can($user3, ArticleVoter::EDIT, $post));
     }
 
-    public function testWrongPermissionStrategy()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid strategy');
-        $permission = new Permission('iji');
-    }
-
     public function testPermissionFactories()
     {
         $permission1 = Permission::affirmative();
         $permission2 = Permission::veto();
         $permission3 = Permission::majority();
+        $permission4 = Permission::generic(50, 0);
 
         $this->assertInstanceOf(AffirmativeStrategy::class, $permission1->getStrategy());
         $this->assertInstanceOf(VetoStrategy::class, $permission2->getStrategy());
         $this->assertInstanceOf(MajorityStrategy::class, $permission3->getStrategy());
+        $this->assertInstanceOf(GenericStrategy::class, $permission4->getStrategy());
     }
 
     public function testCustomStrategy()
@@ -173,6 +169,91 @@ class Test extends TestCase
         $permission->addVoter(new YesVoter());
 
         $this->assertFalse($permission->can($user, 'test'));
+    }
+
+    public function testGenericStrategy()
+    {
+        $permission = new Permission(new GenericStrategy(0, 3));
+        $user = new TestVoterUser();
+
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new YesVoter());
+        $this->assertTrue($permission->can($user, 'test'));
+        $permission->clearVoters();
+
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $this->assertFalse($permission->can($user, 'test'));
+
+
+        $permission = new Permission(new GenericStrategy(62.5, 0));
+
+        // 5/7 = 0.7143
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $this->assertTrue($permission->can($user, 'test'));
+        $permission->clearVoters();
+
+        // 5/8 = 0.625
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new NoVoter());
+        $this->assertFalse($permission->can($user, 'test'));
+
+
+        $permission = new Permission(new GenericStrategy(40, 5));
+
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $this->assertFalse($permission->can($user, 'test'));
+        $permission->clearVoters();
+
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new NoVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new YesVoter());
+        $permission->addVoter(new NoVoter());
+        $this->assertFalse($permission->can($user, 'test'));
+
+    }
+
+    public function testGenericStrategyException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('GenericStrategy should either have a valid percentage or a number of approvals defined.');
+        $permission = new Permission(new GenericStrategy(0, 0));
+
     }
 
 }

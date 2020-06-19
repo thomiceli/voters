@@ -15,7 +15,7 @@ final class VetoStrategy implements VoterStrategy
 
     /**
      * Call all the registered voters, and then vote when they can.
-     * If all voters vote yes, the method return true.
+     * If all voters approved the attribute, the method return true.
      *
      * {@inheritDoc}
      */
