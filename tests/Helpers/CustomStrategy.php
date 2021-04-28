@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Helpers;
+namespace ThomasMiceli\Tests\Helpers;
 
-use Voter\Strategy\VoterStrategy;
-use Voter\VoterUser;
+use ThomasMiceli\Voter\Strategy\VoterStrategy;
+use ThomasMiceli\Voter\VoterUser;
 
 class CustomStrategy implements VoterStrategy {
 

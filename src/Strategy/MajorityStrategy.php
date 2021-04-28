@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Voter\Strategy;
+namespace ThomasMiceli\Voter\Strategy;
 
-use Voter\VoterUser;
+use ThomasMiceli\Voter\VoterUser;
 
 /**
  * Class MajorityStrategy

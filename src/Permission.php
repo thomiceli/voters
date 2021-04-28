@@ -1,14 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Voter;
+namespace ThomasMiceli\Voter;
 
-use InvalidArgumentException;
-use Voter\Strategy\AffirmativeStrategy;
-use Voter\Strategy\GenericStrategy;
-use Voter\Strategy\MajorityStrategy;
-use Voter\Strategy\VetoStrategy;
-use Voter\Strategy\VoterStrategy;
+use ThomasMiceli\Voter\Strategy\AffirmativeStrategy;
+use ThomasMiceli\Voter\Strategy\GenericStrategy;
+use ThomasMiceli\Voter\Strategy\MajorityStrategy;
+use ThomasMiceli\Voter\Strategy\VetoStrategy;
+use ThomasMiceli\Voter\Strategy\VoterStrategy;
 
 /**
  * Class Permission
@@ -19,9 +18,9 @@ class Permission
 {
 
     /**
-     * @var VoterStrategy
+     * @var ?VoterStrategy
      */
-    private VoterStrategy $strategy;
+    private ?VoterStrategy $strategy;
 
     /**
      * @var Voter[]
@@ -34,7 +33,7 @@ class Permission
      * @param VoterStrategy|null $strategy
      */
     public function __construct(
-        VoterStrategy $strategy = null
+        ?VoterStrategy $strategy = null
     ) {
         if ($strategy == null) {
             $strategy = new AffirmativeStrategy;
@@ -48,7 +47,7 @@ class Permission
      *
      * @return Permission
      */
-    public static function affirmative()
+    public static function affirmative(): Permission
     {
         return new self(new AffirmativeStrategy);
     }
@@ -58,7 +57,7 @@ class Permission
      *
      * @return Permission
      */
-    public static function veto()
+    public static function veto(): Permission
     {
         return new self(new VetoStrategy);
     }
@@ -68,7 +67,7 @@ class Permission
      *
      * @return Permission
      */
-    public static function majority()
+    public static function majority(): Permission
     {
         return new self(new MajorityStrategy);
     }
@@ -81,7 +80,7 @@ class Permission
      *
      * @return Permission
      */
-    public static function generic(float $percentage, int $approvals)
+    public static function generic(float $percentage, int $approvals): Permission
     {
         return new self(new GenericStrategy($percentage, $approvals));
     }

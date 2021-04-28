@@ -21,13 +21,13 @@ Let's setup permissions for our blog.
 ```php
 <?php 
 
-$permission = new \Voter\Permission;
+$permission = new \ThomasMiceli\Voter\Permission;
 $permission->addVoter(new ArticleVoter); // register the voter for this permission object
 $user = ...
 $article = ...
 
-$permission->can($user, ArticleVoter::VIEW, $article) // check if our user can view the article
-$permission->can($user, ArticleVoter::EDIT, $article) // check if our user can edit the article
+$permission->can($user, ArticleVoter::VIEW, $article); // check if our user can view the article
+$permission->can($user, ArticleVoter::EDIT, $article); // check if our user can edit the article
 ```
 
 #### Create the voter
@@ -36,7 +36,7 @@ $permission->can($user, ArticleVoter::EDIT, $article) // check if our user can e
 <?php
 
 /* This voter determine what the user can do with an article from our blog. */
-class ArticleVoter implements Voter
+class ArticleVoter implements \ThomasMiceli\Voter\Voter
 {
 
     const VIEW = 'view';
@@ -49,7 +49,7 @@ class ArticleVoter implements Voter
     }
 
     // ...if yes, the voter will determinate and return the permission for this attribute
-    public function vote(?\Voter\VoterUser $user, string $attribute, $subject = null): bool
+    public function vote(?\ThomasMiceli\Voter\VoterUser $user, string $attribute, $subject = null): bool
     {
         /** @var Article $subject */
         switch ($attribute) {
@@ -73,23 +73,24 @@ It's possible to set different strategies to determine the permission when multi
 ```php
 <?php
 
-$permission = new \Voter\Permission(new \Voter\Strategy\AffirmativeStrategy); // default strategy
+$permission = new \ThomasMiceli\Voter\Permission(new \ThomasMiceli\Voter\Strategy\AffirmativeStrategy); // default strategy
 // $permission::can() returns true if at least one of the registered voters approved the attribute
 
-$permission = new \Voter\Permission(new \Voter\Strategy\VetoStrategy);
+$permission = new \ThomasMiceli\Voter\Permission(new \ThomasMiceli\Voter\Strategy\VetoStrategy);
 // $permission::can() returns true if all the registered voters approved the attribute
 
-$permission = new \Voter\Permission(new \Voter\Strategy\MajorityStrategy);
+$permission = new \ThomasMiceli\Voter\Permission(new \ThomasMiceli\Voter\Strategy\MajorityStrategy);
 // $permission::can() returns true if at least half plus one of the registered voters approved the attribute
 ```
 
 We can use factory static methods for a better readability.
+
 ```php
 <?php
 
-$permission = \Voter\Permission::affirmative();
-$permission = \Voter\Permission::veto();
-$permission = \Voter\Permission::majority();
+$permission = \ThomasMiceli\Voter\Permission::affirmative();
+$permission = \ThomasMiceli\Voter\Permission::veto();
+$permission = \ThomasMiceli\Voter\Permission::majority();
 ```
 
 We can create our own strategy and set it to a permission later...
@@ -97,10 +98,10 @@ We can create our own strategy and set it to a permission later...
 ```php
 <?php
 
-class CustomStrategy implements \Voter\Strategy\VoterStrategy {
+class CustomStrategy implements \ThomasMiceli\Voter\Strategy\VoterStrategy {
     
     // the permission is granted if at least 4 voters voted true for an attribute
-    public function can(?\Voter\VoterUser $user, array $voters, string $attribute, $subject): bool
+    public function can(?\ThomasMiceli\Voter\VoterUser $user, array $voters, string $attribute, $subject): bool
     {
         $approvals = 0;
         foreach ($voters as $voter) {
@@ -123,7 +124,7 @@ class CustomStrategy implements \Voter\Strategy\VoterStrategy {
 ```php
 <?php
 
-$permission = new \Voter\Permission(new CustomStrategy);
+$permission = new \ThomasMiceli\Voter\Permission(new CustomStrategy);
 ```
 
 We can even easily create generics voters which allows to define how many voters should approve the attribute.
@@ -131,8 +132,8 @@ We can even easily create generics voters which allows to define how many voters
 ```php
 <?php
 
-$permission = new \Voter\Permission(new \Voter\Strategy\GenericStrategy(40, 5));
-$permission = \Voter\Permission::generic(40, 5);
+$permission = new \ThomasMiceli\Voter\Permission(new \ThomasMiceli\Voter\Strategy\GenericStrategy(40, 5));
+$permission = \ThomasMiceli\Voter\Permission::generic(40, 5);
 // at least 40% and 5 voters should have approved the attribute 
 ```
 

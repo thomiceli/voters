@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Voter\Strategy;
+namespace ThomasMiceli\Voter\Strategy;
 
 use InvalidArgumentException;
-use Voter\VoterUser;
+use ThomasMiceli\Voter\VoterUser;
 
 /**
  * Class GenericStrategy

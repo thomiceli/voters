@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Helpers;
+namespace ThomasMiceli\Tests\Helpers;
 
-use Voter\Voter;
-use Voter\VoterUser;
+use ThomasMiceli\Voter\Voter;
+use ThomasMiceli\Voter\VoterUser;
 
 class ArticleVoter implements Voter
 {

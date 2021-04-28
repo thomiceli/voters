@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests;
+namespace ThomasMiceli\Tests;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Tests\Helpers\ArticleVoter;
-use Tests\Helpers\CustomStrategy;
-use Tests\Helpers\NoVoter;
-use Tests\Helpers\SpecificVoter;
-use Tests\Helpers\TestArticle;
-use Tests\Helpers\TestVoterUser;
-use Tests\Helpers\YesVoter;
-use Voter\Permission;
-use Voter\Strategy\AffirmativeStrategy;
-use Voter\Strategy\GenericStrategy;
-use Voter\Strategy\MajorityStrategy;
-use Voter\Strategy\VetoStrategy;
+use ThomasMiceli\Tests\Helpers\ArticleVoter;
+use ThomasMiceli\Tests\Helpers\CustomStrategy;
+use ThomasMiceli\Tests\Helpers\NoVoter;
+use ThomasMiceli\Tests\Helpers\SpecificVoter;
+use ThomasMiceli\Tests\Helpers\TestArticle;
+use ThomasMiceli\Tests\Helpers\TestVoterUser;
+use ThomasMiceli\Tests\Helpers\YesVoter;
+use ThomasMiceli\Voter\Permission;
+use ThomasMiceli\Voter\Strategy\AffirmativeStrategy;
+use ThomasMiceli\Voter\Strategy\GenericStrategy;
+use ThomasMiceli\Voter\Strategy\MajorityStrategy;
+use ThomasMiceli\Voter\Strategy\VetoStrategy;
 
 class Test extends TestCase
 {
@@ -117,7 +117,7 @@ class Test extends TestCase
 
     public function testWithConditionVoter()
     {
-        $permission = new \Voter\Permission();
+        $permission = new \ThomasMiceli\Voter\Permission();
         $user = new TestVoterUser();
         $user2 = new TestVoterUser();
         $user3 = null; // disconnected user

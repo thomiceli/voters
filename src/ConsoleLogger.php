@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Voter;
+namespace ThomasMiceli\Voter;
 
 /**
  * Class ConsoleLogger

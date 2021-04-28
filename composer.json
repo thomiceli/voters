@@ -1,7 +1,7 @@
 {
     "name": "thomas-miceli/voters",
     "description": "Check and validate complex specific user permissions.",
-    "version": "1.1.0",
+    "version": "1.0",
     "type": "library",
     "keywords": ["user", "permission", "check", "validate", "voters", "security"],
     "authors": [
@@ -20,8 +20,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Voter\\": "src/",
-            "Tests\\": "tests/"
+            "ThomasMiceli\\Voter\\": "src/",
+            "ThomasMiceli\\Tests\\": "tests/"
         }
     },
     "require-dev": {
